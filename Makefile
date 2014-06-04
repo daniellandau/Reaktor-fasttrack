@@ -1,11 +1,13 @@
 outrun-scala:
 	scalac *.scala
 
-outrun-c:
-	gcc *.c
+outrun-c: OutRunCalculator.c
+	gcc OutRunCalculator.c -o outrun-c
 
-outrun-asm:
-	gcc *.s
+outrun-asm: *.s outrun-asm-helper.c
+	gcc *.s outrun-asm-helper.c -o outrun-asm
+
+generate: generate.c
 
 cleanish:
 	rm -f *.class *.o
