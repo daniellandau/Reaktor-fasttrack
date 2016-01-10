@@ -19,23 +19,31 @@ int main(int argc, const char *argv[])
   }
 
   char * buf = (char*)malloc(st.st_size + 1);
+  if (buf == NULL) {
+    printf("can't allocate memory\n");
+    return 3;
+  }
 
   FILE * in = fopen(argv[1], "r");
 
   fread(buf, 1, st.st_size, in);
   buf[st.st_size] = '\0';
   int lines = 0;
-  int i;
+  size_t i;
   for (i = 0; i < st.st_size; ++i) {
     if (buf[i] == '\n') {
       ++lines;
     }
   }
-  int tree_height = lines - 1;
-  int tree_size = ((tree_height+1)*tree_height)/2;
+  size_t tree_height = lines - 1;
+  size_t tree_size = ((tree_height+1)*tree_height)/2;
 
   int * tree = (int*)malloc( tree_size * sizeof(int));
-  
+  if (tree == NULL) {
+    printf("can't allocate memory for tree\n");
+    return 3;
+  }
+
   char * tok = strtok(buf, "\n");
   i = 0;
   while (1) {
@@ -46,7 +54,7 @@ int main(int argc, const char *argv[])
   }
 
   int * mergelinebuf = (int*) malloc( tree_height * sizeof(int));
-  int array_off = 1, current_size;
+  size_t array_off = 1, current_size;
   for (current_size = tree_height - 1; current_size > 0; --current_size) {
     for (i = 0; i < current_size; ++i) {
       mergelinebuf[i] = tree[tree_size - i - array_off - (current_size + 1)] +
